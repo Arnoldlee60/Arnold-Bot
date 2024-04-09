@@ -113,9 +113,14 @@ def run_discord_bot():
                         await message.delete()
 
                     await command(temp, user_message.removeprefix("!command "), is_private)
+                elif user_message.startswith("!help"):
+                    with open('list_of_commands.txt', 'r') as file:
+                        list_of_commands = file.read()
+                    
+                    await message.author.send(list_of_commands)
 
                 else:
                     await chat_gpt_question(message, user_message, is_private)
-                    
+
 
     client.run(TOKEN)

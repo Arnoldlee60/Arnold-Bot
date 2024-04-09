@@ -25,3 +25,5 @@ def ban_list() -> list:
 def commands(message: str) -> list:
     if message.startswith("https://www.reddit.com"):
         return replace_reddit_url(message)
+    else:
+        return "That command does not exist, please type !help for a list of commands."
