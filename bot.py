@@ -29,9 +29,10 @@ async def send_message(message, user_message, is_private):
         with open("txt_files/log.txt", "a") as file:
             file.write(f"ERROR: {e} @{current_time}\n")
 
-async def reddit_embed(message, user_message, is_private):
+async def command(message, user_message, is_private):
     try:
-        response = responses.replace_reddit_url(user_message)
+        #response = responses.replace_reddit_url(user_message)
+        response = responses.commands(user_message)
         await message.author.send(response) if is_private else await message.channel.send(response)
 
         with open("txt_files/log.txt", "a") as file:
@@ -106,18 +107,15 @@ def run_discord_bot():
             if str(message.author) in responses.ban_list():
                 await banned_message(message, user_message, is_private)
             else:
-                if user_message.startswith("https://www.reddit.com"):
+                if user_message.startswith("!command"):
                     temp = message
                     if is_private == False:
                         await message.delete()
 
-                    await reddit_embed(temp, user_message, is_private)
+                    await command(temp, user_message.removeprefix("!command "), is_private)
+
                 else:
                     await chat_gpt_question(message, user_message, is_private)
-                # elif user_message[-1] == "?":
-                #     await chat_gpt_question(message, user_message, is_private)
-                #     #await gemini_question(message, user_message, is_private)
-                # else:
-                #     await send_message(message, user_message, is_private)
+                    
 
     client.run(TOKEN)
